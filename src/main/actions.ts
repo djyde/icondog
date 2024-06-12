@@ -24,7 +24,8 @@ export const getIconsByPrefix = async (e, prefix: string) => {
     .map((name) => {
       const icon = icons[name]
       const svg = iconToSVG(icon, {
-        // height: json.height || 'auto',
+        height: json.height || 'auto',
+        width: json.width || 'auto'
       })
       svg.attributes.viewBox = getSVGViewBox(`0 0 ${json.width} ${json.height}`)!.join(' ')
       const html = iconToHTML(svg.body, svg.attributes)

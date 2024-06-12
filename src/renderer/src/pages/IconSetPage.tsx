@@ -1,8 +1,9 @@
 import { Image, Input, Textarea, cn } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { VariableSizeList as List } from 'react-window';
 import { FixedSizeGrid as Grid } from 'react-window';
+import { FixedSizeList as List } from 'react-window';
+
 
 import AutoSizer from "react-virtualized-auto-sizer";
 import React from "react";
@@ -91,12 +92,24 @@ function IconList(props: {
       <AutoSizer>
         {({ width, height }) => {
           const iconSize = 48
+          const padding = 12
           const gap = 12
-          const boxSize = iconSize + gap * 4
-          const gridColumns = Math.floor(width / boxSize)
+          const gridColumns = (() => {
+            if (width < 200) {
+              return 2
+            } else if (width < 400) {
+              return 3
+            } else if (width < 600) {
+              return 4
+            } else {
+              return 8
+            }
+          })();
+
+          const boxSize = width / gridColumns
 
           // get grid columns count based on width and box size and gap and centered it 
-          const renderCell = (info: { columnIndex: number, rowIndex: number, style: React.CSSProperties }) => {
+          const renderGridCell = (info: { columnIndex: number, rowIndex: number, style: React.CSSProperties }) => {
             const currentIcon = props.icons[info.rowIndex * gridColumns + info.columnIndex]
 
             if (!currentIcon) {
@@ -137,17 +150,61 @@ function IconList(props: {
             )
           }
 
+          const renderListCell = (info: { index: number, style: React.CSSProperties }) => {
+            const currentLineIcons = props.icons.slice(info.index * gridColumns, (info.index + 1) * gridColumns)
+            return (
+              <div className="flex justify-around" style={{
+                padding: padding,
+                ...info.style,
+                gap: gap,
+                // gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`
+              }}>
+                {currentLineIcons.map(icon => {
+                  const element = React.createElement('svg', {
+                    // Mandatory attributes
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    xmlnsXlink: 'http://www.w3.org/1999/xlink',
+                    // width, height, viewBox
+                    ...icon?.svg.attributes,
+                    // innerHTML
+                    width: `${iconSize}px`,
+                    height: `${iconSize}px`,
+                    dangerouslySetInnerHTML: {
+                      __html: icon?.svg.body,
+                    },
+                  })
+                  return (
+                    <div onClick={_ => {
+                      props.onSelect(icon)
+                    }} key={icon.name} className="hover:border hover:border-default-300 border-default flex justify-center items-center w-full h-full rounded-lg">
+                      <div className="">
+                        {element}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          }
           return (
-            <Grid
-              columnCount={gridColumns}
-              columnWidth={boxSize}
+            // <Grid
+            //   columnCount={gridColumns}
+            //   columnWidth={boxSize}
+            //   height={height}
+            //   rowCount={Math.ceil(props.icons.length / gridColumns)}
+            //   rowHeight={boxSize}
+            //   width={width}
+            // >
+            //   {renderCell}
+            // </Grid>
+            <List
               height={height}
-              rowCount={Math.ceil(props.icons.length / gridColumns)}
-              rowHeight={boxSize}
               width={width}
+              itemCount={props.icons.length / gridColumns}
+              itemSize={boxSize}
             >
-              {renderCell}
-            </Grid>
+              {renderListCell}
+            </List>
           )
         }}
       </AutoSizer>
