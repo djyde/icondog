@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1718104049821,
+      "tag": "0000_conscious_monster_badoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1718105223587,
+      "tag": "0001_complex_spectrum",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+ALTER TABLE `icon-sets` ADD `version` text;
