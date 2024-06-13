@@ -108,48 +108,6 @@ function IconList(props: {
 
           const boxSize = width / gridColumns
 
-          // get grid columns count based on width and box size and gap and centered it 
-          const renderGridCell = (info: { columnIndex: number, rowIndex: number, style: React.CSSProperties }) => {
-            const currentIcon = props.icons[info.rowIndex * gridColumns + info.columnIndex]
-
-            if (!currentIcon) {
-              return null
-            }
-            const element = React.createElement('svg', {
-              // Mandatory attributes
-              xmlns: 'http://www.w3.org/2000/svg',
-              xmlnsXlink: 'http://www.w3.org/1999/xlink',
-              // width, height, viewBox
-              ...currentIcon?.svg.attributes,
-              // innerHTML
-              width: `${iconSize}px`,
-              height: `${iconSize}px`,
-              dangerouslySetInnerHTML: {
-                __html: currentIcon?.svg.body,
-              },
-            })
-
-            return (
-              <div style={{
-                ...info.style,
-                width: boxSize,
-                height: boxSize,
-              }}>
-                <div className={cn("flex justify-center items-center border rounded-lg hover:border-black", {
-
-                })} style={{
-                  width: boxSize - gap,
-                  height: boxSize - gap,
-                  margin: `${gap * 1.25}px`,
-                }} onClick={_ => {
-                  props.onSelect(currentIcon)
-                }}>
-                  {element}
-                </div>
-              </div>
-            )
-          }
-
           const renderListCell = (info: { index: number, style: React.CSSProperties }) => {
             const currentLineIcons = props.icons.slice(info.index * gridColumns, (info.index + 1) * gridColumns)
             return (
@@ -187,16 +145,6 @@ function IconList(props: {
             )
           }
           return (
-            // <Grid
-            //   columnCount={gridColumns}
-            //   columnWidth={boxSize}
-            //   height={height}
-            //   rowCount={Math.ceil(props.icons.length / gridColumns)}
-            //   rowHeight={boxSize}
-            //   width={width}
-            // >
-            //   {renderCell}
-            // </Grid>
             <List
               height={height}
               width={width}
