@@ -1,0 +1,55 @@
+name: Build Electron App
+
+on:
+  push:
+    branches:
+    - release/*
+
+permissions:
+  contents: write
+
+jobs:
+  build_macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [flyci-macos-14-xlarge-m2, windows-latest]
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Signing By Apple Developer ID
+        if: matrix.os == 'flyci-macos-14-xlarge-m2'
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+      - name: Build macOS app
+        if: matrix.os == 'flyci-macos-14-xlarge-m2'
+        run: CSC_IDENTITY_AUTO_DISCOVERY=false pnpm run build:mac
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          GH_TOKEN: ${{ github.token }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Build windows app
+        if: matrix.os == 'windows-latest'
+        run: pnpm run build:win
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Relase
+        run: pnpm run release
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          GH_TOKEN: ${{ github.token }}
