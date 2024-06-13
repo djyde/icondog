@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: iconset
+appId: org.randynamic.icondog
+productName: IconDog
 directories:
   buildResources: build
 files:
@@ -14,7 +14,7 @@ asarUnpack:
   - node_modules/better-sqlite3/**
   - node_modules/@iconify/json/**
 win:
-  executableName: iconset
+  executableName: icondog
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
