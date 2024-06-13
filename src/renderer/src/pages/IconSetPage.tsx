@@ -6,13 +6,17 @@ import { FixedSizeList as List } from 'react-window';
 
 
 import AutoSizer from "react-virtualized-auto-sizer";
-import React from "react";
+import React, { useEffect } from "react";
 
 export function IconSetPage() {
   const params = useParams()
   const iconSetPrefix = params.prefix as string
 
-  const [selectedIcon, setSelectedIcon] = React.useState<Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0] | null>(null)
+  const [selectedIcon, setSelectedIcon] = React.useState<Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0] | undefined>(undefined)
+
+  useEffect(() => {
+    setSelectedIcon(undefined)
+  }, [iconSetPrefix])
 
   const iconsQuery = useQuery({
     queryKey: ['icons', iconSetPrefix],
@@ -58,7 +62,7 @@ export function IconSetPage() {
       <div className="flex flex-1 overflow-scroll">
         <div className="flex-1 overflow-scroll">
           {filteredIcons && <>
-            <IconList onSelect={icon => {
+            <IconList selected={selectedIcon} onSelect={icon => {
               setSelectedIcon(icon)
             }} icons={filteredIcons} />
           </>}
@@ -81,7 +85,8 @@ export function IconSetPage() {
 
 function IconList(props: {
   icons: Awaited<ReturnType<typeof window.api.getIconsByPrefix>>,
-  onSelect: (icon: Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0]) => void
+  onSelect: (icon: Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0]) => void,
+  selected?: Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0]
 }) {
 
   return (
@@ -134,7 +139,9 @@ function IconList(props: {
                   return (
                     <div onClick={_ => {
                       props.onSelect(icon)
-                    }} key={icon.name} className="hover:border hover:border-default-300 border-default flex justify-center items-center w-full h-full rounded-lg">
+                    }} key={icon.name} className={cn("hover:border hover:border-default-300 border-default flex justify-center items-center w-full h-full rounded-lg", {
+                      border: props.selected?.name === icon.name
+                    })}>
                       <div className="">
                         {element}
                       </div>

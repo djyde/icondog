@@ -2,7 +2,6 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { runMigrate } from './db'
 import { getIconSets, getIconsByPrefix } from './actions'
 
 function createWindow(): void {
@@ -55,7 +54,7 @@ app.whenReady().then(async () => {
   })
 
 
-  await runMigrate()
+  // await runMigrate()
 
   // IPC test
   ipcMain.handle('getIconSets', getIconSets)

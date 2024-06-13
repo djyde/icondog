@@ -2,8 +2,8 @@ import { Accordion, AccordionItem, ScrollShadow, Spinner, Tab, Tabs, cn } from "
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, Outlet, useNavigation } from "react-router-dom";
+
 export function Layout() {
-  
   const [selectedPrefix, setSelectedPrefix] = useState<string | null>(null)
 
   const remoteIconSetQuery = useQuery({
@@ -23,8 +23,8 @@ export function Layout() {
           </div>
 
           <div className="">
-            <Accordion showDivider={false} isCompact selectionMode="multiple" disableAnimation>
-              <AccordionItem key="iconsets" isDisabled={remoteIconSetQuery.isPending} indicator={remoteIconSetQuery.isPending ? <>
+            <Accordion defaultExpandedKeys={['iconsets']} showDivider={false} isCompact selectionMode="multiple" disableAnimation>
+              <AccordionItem key="iconsets" indicator={remoteIconSetQuery.isPending ? <>
                 <Spinner size="sm" />
               </> : undefined} title={<>
                 <h3 className="text-xs font-bold text-default-500 mx-3">
