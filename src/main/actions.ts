@@ -61,9 +61,17 @@ export const getLabelsByDescription = async (_e, description: string) => {
     return
   }
 
-  const openai = new OpenAI({
-    apiKey: store.get('openai-key') as string
-  })
+  const openaiConfig: { apiKey: string; baseURL?: string } = {
+    apiKey: openaiKey
+  }
+
+  const openaiBaseURL = store.get('openai-base-url') as string
+
+  if (openaiBaseURL) {
+    openaiConfig.baseURL = openaiBaseURL
+  }
+
+  const openai = new OpenAI(openaiConfig)
 
   const searchPrompt = `I'll give you a sentence describing what kind of icon I'm looking for, you come up with some icon name from the description to search for icon as much as possible (don't include the "icon" label itself), at least 10 keywords. Answer keywords directly, separated by commas without space`
   try {
