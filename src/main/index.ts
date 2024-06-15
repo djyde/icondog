@@ -9,7 +9,7 @@ import {
   getLabelsByDescription,
   getLocalIconSets
 } from './actions'
-import { initRenderer, store } from '@shared/store'
+import { initRenderer } from '@shared/store'
 
 import { autoUpdater } from 'electron-updater'
 autoUpdater.setFeedURL({

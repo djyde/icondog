@@ -1,6 +1,4 @@
-import { createBrowserRouter, createHashRouter } from "react-router-dom";
-import App from "./App";
-import { IconGallery } from "./views/IconGallery";
+import { createHashRouter } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { IconSetPage } from "./pages/IconSetPage";
 import { Settings } from "./pages/Settings";

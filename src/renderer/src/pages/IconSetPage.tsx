@@ -1,4 +1,4 @@
-import { Image, Input, Spinner, Textarea, cn } from "@nextui-org/react"
+import { Input, Spinner, Textarea, cn } from "@nextui-org/react"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import { FixedSizeList as List } from 'react-window';

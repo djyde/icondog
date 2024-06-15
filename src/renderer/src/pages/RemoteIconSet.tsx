@@ -20,7 +20,7 @@ export function RemoteIconSetPage() {
     staleTime: Infinity
   })
 
-  const localIconSetsQuery = useQuery({
+  useQuery({
     queryKey: ['local-icon-sets'],
     queryFn: async () => {
       const collections = await window.api.getLocalIconSets() as IconifyJSON[]

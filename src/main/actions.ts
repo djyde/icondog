@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import type { IconifyInfo, IconifyIcons, IconifyIcon, IconifyJSON } from '@iconify/types'
+import type { IconifyInfo, IconifyJSON } from '@iconify/types'
 import { getSVGViewBox, iconToHTML, iconToSVG } from '@iconify/utils'
 import OpenAI from 'openai'
 import axios from 'axios'
@@ -8,8 +8,8 @@ import { store } from '@shared/store'
 import { iconSetPath } from './utils'
 import path from 'node:path'
 import { glob } from 'glob'
-import { IpcMain, dialog } from 'electron'
-export const getIconSets = async (e) => {
+import { dialog } from 'electron'
+export const getIconSets = async (_e) => {
   const collections = (await axios.get<IconifyInfo>(`${ENDPOINT}/collections`)).data
 
   return Object.keys(collections).map((prefix) => {
@@ -22,7 +22,7 @@ export const getIconSets = async (e) => {
   })
 }
 
-export const getIconsByPrefix = async (e, prefix: string) => {
+export const getIconsByPrefix = async (_e, prefix: string) => {
   const json = JSON.parse(
     fs.readFileSync(path.join(iconSetPath, `${prefix}.json`), { encoding: 'utf-8' })
   ) as IconifyJSON
@@ -53,7 +53,7 @@ export const getIconsByPrefix = async (e, prefix: string) => {
     .filter((_) => Boolean(_.dataUrl))
 }
 
-export const getLabelsByDescription = async (e, description: string) => {
+export const getLabelsByDescription = async (_e, description: string) => {
   const openaiKey = store.get('openai-key') as string
 
   if (!openaiKey) {
@@ -101,10 +101,11 @@ export const getLabelsByDescription = async (e, description: string) => {
     return labels
   } catch (e: any) {
     dialog.showErrorBox('OpenAI Error', e.message)
+    return null
   }
 }
 
-export const downloadIconSet = async (e, prefix: string) => {
+export const downloadIconSet = async (_e, prefix: string) => {
   const iconifyJson = await axios.get<IconifyJSON>(
     `https://unpkg.com/@iconify/json@2.2.219/json/${prefix}.json`
   )
@@ -119,7 +120,7 @@ export const downloadIconSet = async (e, prefix: string) => {
   )
 }
 
-export const getLocalIconSets = async (e, prefix?: string) => {
+export const getLocalIconSets = async (_e, prefix?: string) => {
   if (prefix) {
     const file = path.join(iconSetPath, `${prefix}.json`)
     if (fs.existsSync(file)) {

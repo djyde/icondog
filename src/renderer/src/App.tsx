@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
-import { IconGallery } from "./views/IconGallery"
-import { Link, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 
 function App(): JSX.Element {
 

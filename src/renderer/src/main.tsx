@@ -4,7 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { Router, RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 
 const queryClient = new QueryClient({

@@ -1,12 +1,10 @@
-import { Accordion, AccordionItem, Button, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Spinner, Tab, Tabs, cn } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalHeader, cn } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link, Outlet, useLocation, useNavigation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { RemoteIconSetPage } from "./RemoteIconSet";
 import { IconifyJSON } from "@iconify/types";
 
 export function Layout() {
-  const [selectedPrefix, setSelectedPrefix] = useState<string | null>(null)
   const location = useLocation()
 
   const localIconSetsQuery = useQuery({
@@ -22,7 +20,7 @@ export function Layout() {
       <>
         <Modal scrollBehavior="inside" size="4xl">
           <ModalContent>
-            {onClose => {
+            {_onClose => {
               return (
                 <>
                   <ModalHeader>
