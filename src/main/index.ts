@@ -2,13 +2,29 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { getIconSets, getIconsByPrefix } from './actions'
+import {
+  downloadIconSet,
+  getIconSets,
+  getIconsByPrefix,
+  getLabelsByDescription,
+  getLocalIconSets
+} from './actions'
+import { initRenderer, store } from '@shared/store'
+
+import { autoUpdater } from 'electron-updater'
+autoUpdater.setFeedURL({
+  provider: 'github',
+  repo: 'icondog',
+  owner: 'djyde'
+})
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1200,
+    height: 800,
+    minWidth: 1200,
+    minHeight: 800,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
@@ -19,7 +35,6 @@ function createWindow(): void {
       // webSecurity: false,
     }
   })
-
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -46,6 +61,10 @@ app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
+  initRenderer()
+
+
+
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -53,14 +72,18 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window)
   })
 
-
   // await runMigrate()
 
   // IPC test
   ipcMain.handle('getIconSets', getIconSets)
   ipcMain.handle('getIconsByPrefix', getIconsByPrefix)
+  ipcMain.handle('getLocalIconSets', getLocalIconSets)
+  ipcMain.handle('downloadIconSet', downloadIconSet)
+  ipcMain.handle('getLabelsByDescription', getLabelsByDescription)
 
   createWindow()
+
+  autoUpdater.checkForUpdatesAndNotify()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

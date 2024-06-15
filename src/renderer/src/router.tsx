@@ -3,6 +3,8 @@ import App from "./App";
 import { IconGallery } from "./views/IconGallery";
 import { Layout } from "./pages/Layout";
 import { IconSetPage } from "./pages/IconSetPage";
+import { Settings } from "./pages/Settings";
+import { RemoteIconSetPage } from "./pages/RemoteIconSet";
 
 export const router = createHashRouter([
   {
@@ -12,6 +14,14 @@ export const router = createHashRouter([
       {
         path: '/iconset/:prefix',
         element: <IconSetPage />
+      },
+      {
+        path: '/settings',
+        element: <Settings />
+      },
+      {
+        path: '/remote-iconsets',
+        element: <RemoteIconSetPage />
       }
     ]
   }

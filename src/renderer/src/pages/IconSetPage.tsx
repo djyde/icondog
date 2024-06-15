@@ -1,7 +1,6 @@
-import { Image, Input, Textarea, cn } from "@nextui-org/react"
-import { useQuery } from "@tanstack/react-query"
+import { Image, Input, Spinner, Textarea, cn } from "@nextui-org/react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { FixedSizeGrid as Grid } from 'react-window';
 import { FixedSizeList as List } from 'react-window';
 
 
@@ -12,11 +11,24 @@ export function IconSetPage() {
   const params = useParams()
   const iconSetPrefix = params.prefix as string
 
+  // can seperated by comma
+  const [searchKeyword, setSearchKeyword] = React.useState('')
+
   const [selectedIcon, setSelectedIcon] = React.useState<Awaited<ReturnType<typeof window.api.getIconsByPrefix>>[0] | undefined>(undefined)
 
   useEffect(() => {
     setSelectedIcon(undefined)
+    setSearchKeyword('')
   }, [iconSetPrefix])
+
+  const searchMutation = useMutation({
+    mutationFn: async (body: {
+      description: string
+    }) => {
+      const labels = await window.api.getLabelsByDescription(body.description)
+      setSearchKeyword(labels || "")
+    }
+  })
 
   const iconsQuery = useQuery({
     queryKey: ['icons', iconSetPrefix],
@@ -26,10 +38,11 @@ export function IconSetPage() {
     }
   })
 
-  const [searchKeyword, setSearchKeyword] = React.useState('')
-
   const filteredIcons = searchKeyword ? iconsQuery.data?.filter(icon => {
-    return icon.name.toLowerCase().includes(searchKeyword.toLowerCase())
+    const keywords = searchKeyword.split(',').map(keyword => keyword.trim())
+    return keywords.some(keyword => {
+      return icon.name.includes(keyword)
+    })
   }) : iconsQuery.data
 
   return (
@@ -40,15 +53,24 @@ export function IconSetPage() {
         </div>
 
         <div className="z-10">
-          <form onSubmit={e => {
+          <form onSubmit={async e => {
             e.preventDefault()
-            // const formData = new FormData(e.target as HTMLFormElement)
-            // const keyword = formData.get('keyword') as string
-            // setSearchKeyword(keyword)
+            const formData = new FormData(e.target as HTMLFormElement)
+            const keyword = formData.get('keyword') as string
+            searchMutation.mutate({
+              description: keyword
+            })
           }}>
-            <Input defaultValue={searchKeyword} name="keyword" onChange={e => {
-              setSearchKeyword(e.target.value)
-            }} placeholder={`Search in ${iconSetPrefix} with ${filteredIcons?.length} icons`} className="w-full" variant="bordered" classNames={{
+            <Input startContent={<>
+              {searchMutation.isPending && <Spinner size="sm" />}
+            </>}  name="keyword" onChange={e => {
+              const keywords = e.target.value
+              if (keywords.startsWith("#")) {
+                setSearchKeyword("")
+              } else {
+                setSearchKeyword(e.target.value)
+              }
+            }} placeholder={`Search in ${iconSetPrefix} with ${filteredIcons?.length} icons. (Start with # to ask AI)`} className="w-full" variant="bordered" classNames={{
               inputWrapper: [
                 "border-1",
                 "shadow-none"
@@ -106,6 +128,8 @@ function IconList(props: {
               return 3
             } else if (width < 600) {
               return 4
+            } else if (width < 800) {
+              return 5
             } else {
               return 8
             }
@@ -139,8 +163,8 @@ function IconList(props: {
                   return (
                     <div onClick={_ => {
                       props.onSelect(icon)
-                    }} key={icon.name} className={cn("hover:border hover:border-default-300 border-default flex justify-center items-center w-full h-full rounded-lg", {
-                      border: props.selected?.name === icon.name
+                    }} key={icon.name} className={cn("hover:outline hover:outline flex justify-center items-center w-full h-full rounded-lg", {
+                      "outline": props.selected?.name === icon.name
                     })}>
                       <div className="">
                         {element}

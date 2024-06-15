@@ -5,13 +5,20 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/preload/*.d.ts",
-    "src/renderer/src/db",
-    "src/shared/**/*"
+    "src/shared/**/*",
+    
   ],
   "compilerOptions": {
+    "experimentalDecorators": true,
     "composite": true,
     "types": [
       "electron-vite/node"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": [
+        "src/shared/*"
+      ]
+    }
   }
 }

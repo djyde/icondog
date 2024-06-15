@@ -3,7 +3,6 @@ import { NextUIProvider } from "@nextui-org/react";
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { Router, RouterProvider } from 'react-router-dom'
 import { router } from './router'

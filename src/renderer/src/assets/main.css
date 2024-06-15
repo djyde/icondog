@@ -1,10 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
+
 button {
   @apply cursor-default !important;
-} */
+}
 
 .movable {
   -webkit-app-region: drag;

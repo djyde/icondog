@@ -1,10 +1,22 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { store } from '@shared/store'
 
 // Custom APIs for renderer
 const api = {
   getIconSets: (...args) => ipcRenderer.invoke('getIconSets', ...args),
-  getIconsByPrefix: (...args) => ipcRenderer.invoke('getIconsByPrefix', ...args)
+  getIconsByPrefix: (...args) => ipcRenderer.invoke('getIconsByPrefix', ...args),
+  downloadIconSet: (...args) => ipcRenderer.invoke('downloadIconSet', ...args),
+  getLocalIconSets: (...args) => ipcRenderer.invoke('getLocalIconSets', ...args),
+  getLabelsByDescription: (...args) => ipcRenderer.invoke('getLabelsByDescription', ...args),
+  store: {
+    get(key: string) {
+      return store.get(key)
+    },
+    set(key: string, value: any) {
+      return store.set(key, value)
+    }
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
