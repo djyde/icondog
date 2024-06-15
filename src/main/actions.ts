@@ -72,6 +72,7 @@ export const getLabelsByDescription = async (e, description: string) => {
       messages: [
         {
           role: 'system',
+          // @ts-expect-error
           content: [
             {
               type: 'text',
