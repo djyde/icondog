@@ -20,6 +20,10 @@ pnpm i
 npm run dev
 ```
 
+## Roadmap
+
+- [Roadmap](https://github.com/users/djyde/projects/11)
+
 ## Credit
 
 - [iconify](https://iconify.design/)
