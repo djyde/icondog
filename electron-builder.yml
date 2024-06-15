@@ -1,4 +1,4 @@
-appId: org.randynamic.icondog
+appId: org.randynamic.epubkit
 productName: IconDog
 directories:
   buildResources: build
@@ -6,11 +6,16 @@ files:
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,sqlite.db,CHANGELOG.md,README.md}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,sqlite.db}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - '!**/node_modules/*.d.ts'
+  - '!**/node_modules/.bin'
+  - '!*.{js,ts,cjs,mjs}'
+
 asarUnpack:
   - resources/**
+
 win:
   executableName: icondog
 nsis:
@@ -29,11 +34,11 @@ mac:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  # notarize: false
-    # teamId: F97DA7QJUN
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder
+  notarize:
+    teamId: F97DA7QJUN
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}-${version}-${arch}.${ext}
 linux:
   target:
     - AppImage
