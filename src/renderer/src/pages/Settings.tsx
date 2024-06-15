@@ -12,8 +12,15 @@ export function Settings() {
             window.api.store.set('openai-key', value)
           }} size="sm" label="OpenAI key" />
         </div>
+
+        <div className="mt-5">
+        <Input spellCheck={false} defaultValue={window.api.store.get('openai-base-url') as string} onChange={e => {
+          const value = e.target.value
+          window.api.store.set("openai-base-url", value);
+        }} size="sm" label="Base URL(Optional, and should with `/v1`)" />
       </div>
 
+      </div>
     </div>
   )
 }
