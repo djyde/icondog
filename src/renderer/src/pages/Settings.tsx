@@ -17,7 +17,7 @@ export function Settings() {
         <Input spellCheck={false} defaultValue={window.api.store.get('openai-base-url') as string} onChange={e => {
           const value = e.target.value
           window.api.store.set("openai-base-url", value);
-        }} size="sm" label="Base URL(Optional, and should with `/v1`)" />
+        }} size="sm" label="Base URL(Optional, should end with `/v1`)" placeholder="https://api.openai.com/v1" />
       </div>
 
       </div>
