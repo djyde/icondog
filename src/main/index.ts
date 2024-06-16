@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import {
+  deleteIconSet,
   downloadIconSet,
   getIconSets,
   getIconsByPrefix,
@@ -63,8 +64,6 @@ app.whenReady().then(async () => {
 
   initRenderer()
 
-
-
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
@@ -79,6 +78,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('getIconsByPrefix', getIconsByPrefix)
   ipcMain.handle('getLocalIconSets', getLocalIconSets)
   ipcMain.handle('downloadIconSet', downloadIconSet)
+  ipcMain.handle('deleteIconSet', deleteIconSet)
   ipcMain.handle('getLabelsByDescription', getLabelsByDescription)
 
   createWindow()

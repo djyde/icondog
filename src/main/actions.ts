@@ -128,6 +128,16 @@ export const downloadIconSet = async (_e, prefix: string) => {
   )
 }
 
+export const deleteIconSet = async (_e, prefix: string) => {
+  const filePath = path.join(iconSetPath, `${prefix}.json`)
+
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    // delete iconset from local
+    fs.unlinkSync(filePath)
+  }
+}
+
 export const getLocalIconSets = async (_e, prefix?: string) => {
   if (prefix) {
     const file = path.join(iconSetPath, `${prefix}.json`)
