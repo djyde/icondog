@@ -7,6 +7,7 @@ const api = {
   getIconSets: (...args) => ipcRenderer.invoke('getIconSets', ...args),
   getIconsByPrefix: (...args) => ipcRenderer.invoke('getIconsByPrefix', ...args),
   downloadIconSet: (...args) => ipcRenderer.invoke('downloadIconSet', ...args),
+  deleteIconSet: (...args) => ipcRenderer.invoke('deleteIconSet', ...args),
   getLocalIconSets: (...args) => ipcRenderer.invoke('getLocalIconSets', ...args),
   getLabelsByDescription: (...args) => ipcRenderer.invoke('getLabelsByDescription', ...args),
   store: {
